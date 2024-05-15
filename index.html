@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD Website</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container-fluid">
+<h1 class="text-center alert alert-danger">CRUD</h1>        
+        <div class="row">
+            <div class="col-sm-2"></div>
+
+            <!-- Context -->
+            <div class="col-sm-8">
+                <h2>Employee List<button style="align-content: right;" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Add Employee</button></h2>
+                {%with messages = get_flashed_messages()%}
+                {%if messages%}
+                {% for message in message %}
+                <div class="alert alert-success alert-dismissable" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" arial-label="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    {{message}}
+                </div>
+                {%endfor%}
+                {%endif%}
+                {%endwith%}
+
+                <!--Input-->
+                <div id="myModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Add New Employee</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <form action="{{ url_for('insert')}}" method="POST">                                                                                                               
+                                    <div class="form-group">
+                                      <label>Name</label>
+                                      <input type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="input here">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" name="email" class="form-control" id="exampleFormControlInput1" placeholder="name@haha.com">
+                                      </div>
+                                      <div class="form-group">
+                                        <label>Phone Number</label>
+                                        <input type="text" name="phone" class="form-control" id="exampleFormControlInput1" placeholder="08xxxxxxxxx">
+                                      </div>    
+                                      <button type="submit" class="btn btn-primary mb-2">Save</button>                                      
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!--Input-->
+
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">S/N</th>
+                            <th scope="col">Name</th> 
+                            <th scope="col">Email</th> 
+                            <th scope="col">Phone</th> 
+                            <th scope="col">Action</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in employee %}
+                        <tr>
+                        <td>{{row.0}}</td>
+                        <td>{{row.1}}</td>
+                        <td>{{row.2}}</td>
+                        <td>{{row.3}}</td>
+                        <td>
+                            <a href="/update/{{row.0}}" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modaledit{{row.0}}">Edit</a>
+                            <a href="/delete/{{ row.0 }}" onclick="return confirm('Delete ?')" class="btn btn-danger btn-sm">Delete</a>
+
+                        </td>
+                    </tr>
+
+                    <!--Update-->
+                <div id="modaledit{{row.0}}" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title">Update Employee</h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <form action="{{ url_for('update')}}" method="POST">                                                                                                               
+                                    <input type="hidden" name="id" value="{{row.0}}">
+                                    <div class="form-group">
+                                      <label>Name</label>
+                                      <input value="{{row.1}}" type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="input here">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input value="{{row.2}}" type="text" name="email" class="form-control" id="exampleFormControlInput1" placeholder="name@haha.com">
+                                      </div>
+                                      <div class="form-group">
+                                        <label>Phone Number</label>
+                                        <input value="{{row.3}}" type="text" name="phone" class="form-control" id="exampleFormControlInput1" placeholder="08xxxxxxxxx">
+                                      </div>    
+                                      <button type="submit" class="btn btn-success mb-2">Update</button>                                      
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <!--Update-->
+
+                        {% endfor %}
+                    </tbody>
+
+
+                </table>
+            </div>
+            <!-- Context -->
+        
+            <div class="col-sm-2"></div>
+
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
